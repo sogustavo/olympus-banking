@@ -1,0 +1,15 @@
+{
+  "name": "@olympus-banking/schemas",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@nestjs/mongoose": "^10.0.10",
+    "mongoose": "^8.5.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  }
+}
