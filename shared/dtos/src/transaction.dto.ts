@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsEnum, IsNumber, IsPositive, Min } from 'class-validator';
-import { TransactionType } from '@olympus-banking/schemas/src';
+import { TransactionType } from '@olympus-banking/schemas';
 
 
 export class CreateTransactionDto {

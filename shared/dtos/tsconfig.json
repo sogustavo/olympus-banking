@@ -3,10 +3,13 @@
   "compilerOptions": {
     "outDir": "./dist",
     "baseUrl": "./",
-    "declaration": true
+    "declaration": true,
+    "paths": {
+      "@olympus-banking/schemas": ["../../../shared/schemas/src"]
+    }
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"],
   "references": [
     { "path": "../../shared/schemas" }
   ]
