@@ -2,16 +2,24 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+    "baseUrl": "./",
+    "declaration": true,
+    "composite": true,
     "strict": true,
     "strictNullChecks": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "./",
     "paths": {
       "@olympus-banking/dtos": ["shared/dtos/src"],
       "@olympus-banking/schemas": ["shared/schemas/src"]
-    }
-  }
+    },
+  },
+  "references": [
+    { "path": "apps/plutus" },
+    { "path": "apps/hermes" },
+    { "path": "shared/schemas" },
+    { "path": "shared/dtos" },
+  ]
 }

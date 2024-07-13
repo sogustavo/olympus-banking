@@ -6,6 +6,7 @@
     "build": "tsc -b"
   },
   "dependencies": {
+    "@olympus-banking/schemas": "1.0.0",
     "class-validator": "^0.14.1",
     "class-transformer": "^0.5.1"
   },
