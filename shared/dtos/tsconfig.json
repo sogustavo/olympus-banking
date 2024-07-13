@@ -5,10 +5,10 @@
     "baseUrl": "./",
     "declaration": true,
     "paths": {
-      "@olympus-banking/schemas": ["../../../shared/schemas/src"]
+      "@olympus-banking/schemas": ["../../../shared/schemas"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [
     { "path": "../../shared/schemas" }

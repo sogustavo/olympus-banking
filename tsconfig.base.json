@@ -10,16 +10,18 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@olympus-banking/dtos": ["shared/dtos/src"],
-      "@olympus-banking/schemas": ["shared/schemas/src"]
+      "@olympus-banking/dtos": ["shared/dtos"],
+      "@olympus-banking/schemas": ["shared/schemas"]
     },
   },
+  "exclude": ["node_modules", "dist"],
   "references": [
     { "path": "apps/plutus" },
     { "path": "apps/hermes" },
     { "path": "shared/schemas" },
-    { "path": "shared/dtos" },
+    { "path": "shared/dtos" }
   ]
 }
