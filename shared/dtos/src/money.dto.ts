@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsString,
@@ -8,6 +9,7 @@ import {
 } from 'class-validator';
 
 export class MoneyDto {
+  @ApiProperty({ description: 'Currency' })
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/, {
@@ -16,6 +18,7 @@ export class MoneyDto {
   @Expose()
   currency: string;
 
+  @ApiProperty({ description: 'Amount' })
   @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   @Expose()

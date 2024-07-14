@@ -5,8 +5,12 @@ import {
   GetAccountDto,
   UpdateAccountDto,
 } from '@olympus-banking/dtos';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('accounts')
+const controller = 'accounts';
+
+@Controller(controller)
+@ApiTags(controller)
 export class AccountsController {
   constructor(private readonly service: AccountsService) {}
 

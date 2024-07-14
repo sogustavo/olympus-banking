@@ -9,8 +9,10 @@ import {
 } from 'class-validator';
 import { Expose, plainToClass, Transform, Type } from 'class-transformer';
 import { MoneyDto } from './money.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAccountDto {
+  @ApiProperty({ description: 'Customer name' })
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/, {
@@ -18,6 +20,10 @@ export class CreateAccountDto {
   })
   customerName: string;
 
+  @ApiProperty({
+    type: [MoneyDto],
+    description: 'Balance list in different currencies',
+  })
   @Type(() => MoneyDto)
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
@@ -27,6 +33,7 @@ export class CreateAccountDto {
 }
 
 export class UpdateAccountDto {
+  @ApiProperty({ description: 'Customer name' })
   @IsString()
   @IsNotEmpty()
   @Matches(/\S/, {
@@ -34,6 +41,10 @@ export class UpdateAccountDto {
   })
   customerName: string;
 
+  @ApiProperty({
+    type: [MoneyDto],
+    description: 'Balance list in different currencies',
+  })
   @Type(() => MoneyDto)
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
@@ -43,12 +54,18 @@ export class UpdateAccountDto {
 }
 
 export class GetAccountDto {
+  @ApiProperty({ description: 'Account id' })
   @Expose()
   id: string;
 
+  @ApiProperty({ description: 'Customer name' })
   @Expose()
   customerName: string;
 
+  @ApiProperty({
+    type: [MoneyDto],
+    description: 'Balance list in different currencies',
+  })
   @Expose()
   @Transform(
     ({ obj: { balances } }: { obj: { balances: Map<string, number> } }) =>
@@ -59,9 +76,11 @@ export class GetAccountDto {
   )
   balances: MoneyDto[];
 
+  @ApiProperty({ description: 'Created date' })
   @Expose()
   createdAt: Date;
 
+  @ApiProperty({ description: 'Updated date' })
   @Expose()
   updatedAt: Date;
 

@@ -10,9 +10,10 @@ async function bootstrap() {
 
   const builder = new DocumentBuilder()
     .setTitle('Plutus API')
-    .setDescription('The Plutus API documentation')
+    .setDescription('Accounts & Transactions REST API')
     .setVersion('1.0')
     .addTag('accounts')
+    .addTag('transactions')
     .build();
 
   const document = SwaggerModule.createDocument(app, builder);
