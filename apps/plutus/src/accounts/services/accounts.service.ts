@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   CreateAccountDto,
@@ -29,7 +29,7 @@ export class AccountsService {
     const account = await this.accounts.findById(id).exec();
 
     if (!account) {
-      return null;
+      throw new NotFoundException(`Account ${id} not found`);
     }
 
     return GetAccountDto.fromObject(account.toObject());
@@ -54,7 +54,7 @@ export class AccountsService {
       .exec();
 
     if (!account) {
-      return null;
+      throw new NotFoundException(`Account ${id} not found`);
     }
 
     return GetAccountDto.fromObject(account.toObject());

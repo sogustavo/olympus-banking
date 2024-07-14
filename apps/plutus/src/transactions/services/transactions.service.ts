@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateTransactionDto, GetTransactionDto } from '@olympus-banking/dtos';
 import {
@@ -22,7 +27,7 @@ export class TransactionsService {
     const account = await this.accounts.findById(accountId);
 
     if (!account) {
-      throw new Error(`Account with id ${accountId} not found.`);
+      throw new NotFoundException(`Account ${accountId} not found`);
     }
 
     const { currency, amount, type } = dto;
@@ -35,13 +40,15 @@ export class TransactionsService {
         break;
       case TransactionType.OUTBOUND:
         if (balance < amount) {
-          throw new Error(`Insufficient funds for currency ${currency}`);
+          throw new UnprocessableEntityException(
+            `Insufficient funds for currency ${currency}`,
+          );
         }
 
         account.balances.set(currency, balance - amount);
         break;
       default:
-        throw new Error(`Invalid operation ${type}`);
+        throw new BadRequestException(`Invalid operation ${type}`);
     }
 
     const model = new this.transactions({
@@ -85,7 +92,9 @@ export class TransactionsService {
       .exec();
 
     if (!transaction) {
-      return null;
+      throw new NotFoundException(
+        `Transaction ${id} not found for account ${accountId}`,
+      );
     }
 
     return GetTransactionDto.fromObject(transaction.toObject());
