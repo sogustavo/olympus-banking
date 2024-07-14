@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as Mongoose } from 'mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class Account extends Document {
@@ -24,14 +24,14 @@ AccountSchema.virtual('id').get(function () {
 
 AccountSchema.set('toJSON', {
   virtuals: true,
-  transform(doc, ret, options) {
+  transform(ret) {
     delete ret._id;
   },
 });
 
 AccountSchema.set('toObject', {
   virtuals: true,
-  transform(doc, ret, options) {
+  transform(ret) {
     delete ret._id;
   },
 });

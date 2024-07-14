@@ -3,7 +3,7 @@ import { Document, Schema as Mongoose } from 'mongoose';
 
 export enum TransactionType {
   INBOUND = 'INBOUND',
-  OUTBOUND = 'OUTBOUND'
+  OUTBOUND = 'OUTBOUND',
 }
 
 @Schema()
@@ -11,7 +11,11 @@ export class Transaction extends Document {
   @Prop({ type: Mongoose.Types.ObjectId, required: true })
   accountId: string;
 
-  @Prop({ type: String, enum: TransactionType, default: TransactionType.INBOUND })
+  @Prop({
+    type: String,
+    enum: TransactionType,
+    default: TransactionType.INBOUND,
+  })
   type: TransactionType;
 
   @Prop({ required: true })
@@ -32,14 +36,14 @@ TransactionSchema.virtual('id').get(function () {
 
 TransactionSchema.set('toJSON', {
   virtuals: true,
-  transform(doc, ret, options) {
+  transform(ret) {
     delete ret._id;
   },
 });
 
 TransactionSchema.set('toObject', {
   virtuals: true,
-  transform(doc, ret, options) {
+  transform(ret) {
     delete ret._id;
   },
 });

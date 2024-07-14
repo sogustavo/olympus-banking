@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, isNotEmpty, ArrayMinSize, ArrayNotEmpty, ArrayUnique, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  ArrayMinSize,
+  ArrayNotEmpty,
+  ArrayUnique,
+  ValidateNested,
+} from 'class-validator';
 import { Expose, plainToClass, Transform, Type } from 'class-transformer';
 import { MoneyDto } from './money.dto';
 
@@ -36,8 +43,13 @@ export class GetAccountDto {
   customerName: string;
 
   @Expose()
-  @Transform(({ obj: { balances } }: { obj: { balances: Map<string, number> } }) =>
-    Array.from(balances.entries()).map(([currency, amount]) => ({ currency, amount })))
+  @Transform(
+    ({ obj: { balances } }: { obj: { balances: Map<string, number> } }) =>
+      Array.from(balances.entries()).map(([currency, amount]) => ({
+        currency,
+        amount,
+      })),
+  )
   balances: MoneyDto[];
 
   @Expose()
