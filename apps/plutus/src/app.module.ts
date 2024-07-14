@@ -2,13 +2,15 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
-import { connectionString } from './config';
+import { mongo } from './config';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(connectionString),
+    MongooseModule.forRoot(mongo.connectionString),
     AccountsModule,
     TransactionsModule,
+    EventsModule,
   ],
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import {
 } from '@olympus-banking/schemas';
 import { TransactionsController } from './controllers/transactions.controller';
 import { TransactionsService } from './services/transactions.service';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TransactionsService } from './services/transactions.service';
       { name: Transaction.name, schema: TransactionSchema },
     ]),
     MongooseModule.forFeature([{ name: Account.name, schema: AccountSchema }]),
+    EventsModule,
   ],
   controllers: [TransactionsController],
   providers: [TransactionsService],

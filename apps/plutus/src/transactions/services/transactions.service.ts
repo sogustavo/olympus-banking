@@ -12,12 +12,14 @@ import {
   TransactionType,
 } from '@olympus-banking/schemas';
 import { Model } from 'mongoose';
+import { EventsService } from 'src/events/services/events.service';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectModel(Transaction.name) private transactions: Model<Transaction>,
     @InjectModel(Account.name) private accounts: Model<Account>,
+    private readonly events: EventsService,
   ) {}
 
   async createTransaction(
@@ -69,7 +71,11 @@ export class TransactionsService {
 
       await session.commitTransaction();
 
-      return GetTransactionDto.fromObject(transaction.toObject());
+      const object = transaction.toObject();
+
+      this.events.send(object, 'transaction', 'created');
+
+      return GetTransactionDto.fromObject(object);
     } catch (error) {
       if (session) {
         await session.abortTransaction();
