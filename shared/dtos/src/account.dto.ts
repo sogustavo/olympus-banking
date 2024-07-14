@@ -5,6 +5,7 @@ import {
   ArrayNotEmpty,
   ArrayUnique,
   ValidateNested,
+  Matches,
 } from 'class-validator';
 import { Expose, plainToClass, Transform, Type } from 'class-transformer';
 import { MoneyDto } from './money.dto';
@@ -12,10 +13,13 @@ import { MoneyDto } from './money.dto';
 export class CreateAccountDto {
   @IsString()
   @IsNotEmpty()
+  @Matches(/\S/, {
+    message: 'customerName should not be empty or contain only spaces',
+  })
   customerName: string;
 
-  @ValidateNested({ each: true })
   @Type(() => MoneyDto)
+  @ValidateNested({ each: true })
   @ArrayMinSize(1)
   @ArrayNotEmpty()
   @ArrayUnique((value: MoneyDto) => value.currency)
@@ -25,10 +29,13 @@ export class CreateAccountDto {
 export class UpdateAccountDto {
   @IsString()
   @IsNotEmpty()
+  @Matches(/\S/, {
+    message: 'customerName should not be empty or contain only spaces',
+  })
   customerName: string;
 
-  @ValidateNested({ each: true })
   @Type(() => MoneyDto)
+  @ValidateNested({ each: true })
   @ArrayMinSize(1)
   @ArrayNotEmpty()
   @ArrayUnique((value: MoneyDto) => value.currency)

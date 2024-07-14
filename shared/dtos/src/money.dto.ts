@@ -1,15 +1,23 @@
 import { Expose } from 'class-transformer';
-import { IsString, IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsPositive,
+  Matches,
+} from 'class-validator';
 
 export class MoneyDto {
   @IsString()
   @IsNotEmpty()
+  @Matches(/\S/, {
+    message: 'currency should not be empty or contain only spaces',
+  })
   @Expose()
   currency: string;
 
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
-  @Min(0.01)
   @Expose()
   amount: number;
 }
