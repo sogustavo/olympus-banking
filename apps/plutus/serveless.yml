@@ -1,0 +1,59 @@
+service: plutus
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    MONGO__CONNECTION_STRING: ${env:MONGO__CONNECTION_STRING}
+    AWS__EVENT_BRIDGE__ENDPOINT: ${env:AWS__EVENT_BRIDGE__ENDPOINT}
+    AWS__ACCESS_KEY_ID: ${env:AWS__ACCESS_KEY_ID}
+    AWS__SECRET_ACCESS_KEY: ${env:AWS__SECRET_ACCESS_KEY}
+    AWS__REGION: ${env:AWS__REGION}
+    AWS__SSL_ENABLED: ${env:AWS__SSL_ENABLED}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+functions:
+  createAccount:
+    handler: dist/apps/plutus/lambda.handler
+    events:
+      - http:
+          path: accounts
+          method: post
+
+  getAccount:
+    handler: dist/apps/plutus/lambda.handler
+    events:
+      - http:
+          path: accounts/{id}
+          method: get
+
+  updateAccount:
+    handler: dist/apps/plutus/lambda.handler
+    events:
+      - http:
+          path: accounts/{id}
+          method: put
+
+  createTransaction:
+    handler: dist/apps/plutus/lambda.handler
+    events:
+      - http:
+          path: accounts/{accountId}/transactions
+          method: post
+
+  getTransaction:
+    handler: dist/apps/plutus/lambda.handler
+    events:
+      - http:
+          path: accounts/{accountId}/transactions/{id}
+          method: get
+
+plugins:
+  - serverless-offline
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/**'
+    - 'dist/**'

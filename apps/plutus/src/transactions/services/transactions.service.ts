@@ -12,7 +12,7 @@ import {
   TransactionType,
 } from '@olympus-banking/schemas';
 import { Model } from 'mongoose';
-import { EventsService } from 'src/events/services/events.service';
+import { EventsService } from '../../events/services/events.service';
 
 @Injectable()
 export class TransactionsService {
@@ -73,7 +73,7 @@ export class TransactionsService {
 
       const object = transaction.toObject();
 
-      this.events.send(object, 'transaction', 'created');
+      this.events.send(object, 'transaction');
 
       return GetTransactionDto.fromObject(object);
     } catch (error) {

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AccountsModule } from './accounts/accounts.module';
-import { TransactionsModule } from './transactions/transactions.module';
-import { mongo } from './config';
 import { EventsModule } from './events/events.module';
+import { mongo } from './config';
+import { StatementsModule } from './statements/statements.module';
 
 @Module({
   imports: [
@@ -12,9 +11,8 @@ import { EventsModule } from './events/events.module';
       retryAttempts: 3,
       retryDelay: 1000,
     }),
-    AccountsModule,
-    TransactionsModule,
     EventsModule,
+    StatementsModule,
   ],
 })
 export class AppModule {}

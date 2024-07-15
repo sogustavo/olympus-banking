@@ -22,6 +22,8 @@ export class AccountsService {
 
     const account = await model.save();
 
+    // TODO: I will not do it right now, but we should consider creating a INBOUND Transaction here as well, otherwise, the statement will be empty, even the account having balance
+
     return GetAccountDto.fromObject(account.toObject());
   }
 
@@ -52,6 +54,8 @@ export class AccountsService {
         { new: true },
       )
       .exec();
+
+    // TODO: Same here
 
     if (!account) {
       throw new NotFoundException(`Account ${id} not found`);

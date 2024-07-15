@@ -1,11 +1,12 @@
 {
   "name": "@olympus-banking/plutus",
   "version": "1.0.0",
-  "main": "dist/main.js",
+  "main": "dist/src/main.js",
   "scripts": {
     "build": "tsc -b",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:prod": "node dist/src/main",
     "format": "prettier --write 'src/**/*.{ts,tsx,json,md}'",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
@@ -17,7 +18,11 @@
     "@nestjs/platform-express": "^10.3.10",
     "@olympus-banking/dtos": "1.0.0",
     "@olympus-banking/schemas": "1.0.0",
+    "@types/aws-lambda": "^8.10.141",
+    "@vendia/serverless-express": "^4.12.6",
+    "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1659.0",
+    "aws-serverless-express": "^3.4.0",
     "dotenv": "^16.4.5",
     "mongoose": "^8.5.1",
     "swagger-ui-express": "^5.0.1"
@@ -27,6 +32,7 @@
     "@nestjs/schematics": "^10.1.2",
     "@nestjs/swagger": "^7.4.0",
     "@nestjs/testing": "^10.3.10",
+    "@types/aws-serverless-express": "^3.3.9",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",

@@ -1,0 +1,48 @@
+service: hermes
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    MONGO__CONNECTION_STRING: ${env:MONGO__CONNECTION_STRING}
+    AWS__SQS__ENDPOINT: ${env:AWS__SQS__ENDPOINT}
+    AWS__SQS__QUEUE: ${env:AWS__SQS__QUEUE}
+    AWS__ACCESS_KEY_ID: ${env:AWS__ACCESS_KEY_ID}
+    AWS__SECRET_ACCESS_KEY: ${env:AWS__SECRET_ACCESS_KEY}
+    AWS__REGION: ${env:AWS__REGION}
+    AWS__SSL_ENABLED: ${env:AWS__SSL_ENABLED}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+functions:
+  processEvents:
+    handler: dist/apps/hermes/lambda.handler
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt: [EventsQueue, Arn]
+          batchSize: 10
+          maximumBatchingWindow: 20
+
+  getStatements:
+    handler: dist/apps/hermes/lambda.handler
+    events:
+      - http:
+          path: accounts/{accountId}/statements/{year}/{month}
+          method: get
+
+resources:
+  Resources:
+    EventsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${env:AWS__SQS__QUEUE}
+
+plugins:
+  - serverless-offline
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/**'
+    - 'dist/**'
