@@ -1,0 +1,38 @@
+# Node and npm related files
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Local env files
+.env
+*.local
+
+# Logs
+logs
+*.log
+*.tsbuildinfo
+
+# Docker files
+Dockerfile
+docker-compose.yml
+compose.yml
+
+# Git files
+.git
+.gitignore
+
+# Build directories
+dist
+build
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode
+.idea
+
+# Temporary files
+tmp
+temp

@@ -1,37 +1,74 @@
 services:
-  mongodb:
+  database:
     image: mongo:latest
-    container_name: mongodb
+    container_name: database
     restart: always
-    command: --replSet rs0
-    environment:
-      MONGO_INITDB_DATABASE: olympus-banking
-    healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017/test --quiet
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
     ports:
       - 27017:27017
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'database:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
-      - mongodb:/data/db
-      - ./mongo/init/:/docker-entrypoint-initdb.d/:ro
+      - database:/data/db
 
   localstack:
     image: localstack/localstack:latest
     container_name: localstack
     ports:
       - 4566:4566
-      - '4510-4559:4510-4559'
+      - 4510-4559:4510-4559
     environment:
       - AWS_DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=fake_key_id
       - AWS_SECRET_ACCESS_KEY=fake_secret_key
-      - SERVICES=lambda,events,eventbridge
+      - SERVICES=lambda,events,eventbridge,sqs
       - DEBUG=0
     volumes:
-      - 'localstack:/var/lib/localstack'
+      - localstack:/var/lib/localstack
+      - ./init/localstack/init.sh:/etc/localstack/init/ready.d/init.sh
+
+  plutus:
+    build:
+      context: .
+      dockerfile: ./apps/plutus/Dockerfile
+    container_name: plutus
+    environment:
+      - PORT=3000
+      - MONGO__CONNECTION_STRING=mongodb://database:27017/olympus-banking?replicaSet=rs0
+      - AWS__EVENT_BRIDGE__ENDPOINT=http://localstack:4566
+      - AWS__ACCESS_KEY_ID=fake_key_id
+      - AWS__SECRET_ACCESS_KEY=fake_secret_key
+      - AWS__REGION=us-east-1
+      - AWS__SSL_ENABLED=false
+    ports:
+      - 3001:3000
+    depends_on:
+      - database
+      - localstack
+
+  hermes:
+    build:
+      context: .
+      dockerfile: ./apps/hermes/Dockerfile
+    container_name: hermes
+    environment:
+      - PORT=3000
+      - MONGO__CONNECTION_STRING=mongodb://database:27017/olympus-banking?replicaSet=rs0
+      - AWS__SQS__ENDPOINT=http://localstack:4566
+      - AWS__SQS__QUEUE=http://localstack:4566/000000000000/transactions
+      - AWS__ACCESS_KEY_ID=fake_key_id
+      - AWS__SECRET_ACCESS_KEY=fake_secret_key
+      - AWS__REGION=us-east-1
+      - AWS__SSL_ENABLED=false
+    ports:
+      - 3002:3000
+    depends_on:
+      - database
+      - localstack
 
 volumes:
-  mongodb:
+  database:
   localstack:
